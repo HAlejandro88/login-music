@@ -1,0 +1,137 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/elements/dom-if.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+
+
+<dom-module id="login-music">
+  <template>
+    <style>
+      :host {
+        display: block;
+       
+        background: rgba(0, 0, 0, 0.1);
+        color: black;
+        transform: translate(-2%,-2%);
+        box-sizing: border-box;
+        width: 320px;
+        height: 420px;
+        text-align: center;
+      }
+
+      paper-button.boton {
+        border-radius: 8px;
+        background-color: rgb(108, 230, 9);
+      }
+      #picUser{
+        width: 80px;
+        height: 100px;
+        border-radius: 8px;
+        text-align: center;
+        padding-left: 12px;
+      }
+      paper-button.aqui{
+        border-radius: 8px;
+        color: black;
+        cursor: pointer;
+      }
+      paper-button.aqui:hover{
+        color: red;
+        font-size: 18px;
+      }
+      
+    </style>
+    <dom-if if="[[toggle]]">
+      <template>
+        <div class="login" id="log">  
+          <img src="/image/user.png" id="picUser">            
+          <h2>Iniciar sesión</h2>
+          <p>¿No tienes cuenta?,¿no te pierdas la oportunidad de escuchar lo mejor en musica? Da clic</p>
+            <paper-button on-tap="setToggle" class="aqui">aquí</paper-button>
+            <paper-input label="Email">
+              <iron-icon icon="mail" slot="prefix"></iron-icon>
+              <div slot="suffix">@email.com</div>
+            </paper-input>
+            <paper-input label="Contraseña" type="password" value="{{password}}"></paper-input>
+            <paper-button on-tap="login" class="boton">Iniciar sesión</paper-button>
+        </div>
+      </template>
+    </dom-if>  
+    <dom-if if="[[!toggle]]">
+      <template>
+        <div class="signin">
+          <h2>Registro</h2>
+          <p>¿Ya tienes cuenta? Da clic</p>
+            <iron-icon icon="myicons:mail"></iron-icon>
+            <paper-button on-tap="setToggle" class="aqui">aquí</paper-button>
+            <paper-input label="Email" value="{{username}}"></paper-input>
+            <paper-input label="Edad" value="{{age}}"></paper-input>
+            <paper-input label="Contraseña" type="password" value="{{password}}"></paper-input>
+            <paper-button on-tap="signin" class="boton">Registrarse</paper-button>
+        </div>
+      </template>
+    </dom-if>
+  </template>
+
+  <script>
+    /**
+     * `login-music`
+     * 
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class LoginMusic extends Polymer.Element {
+      static get is() { return 'login-music'; }
+      static get properties() {
+        return {
+          toggle: {
+            type: Boolean,
+            value: true
+          },
+          username: {
+            type: String,
+            value: ''
+          },
+          password: {
+            type: String,
+            value: ''
+          },
+          age: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+      login(){
+        this.dispatchEvent(new CustomEvent('login-user'),{
+          bubbles:false,
+          composed:false,
+          detail:{
+            username: this.username,
+            password: this.password
+          }
+        });
+      }
+      signin(){
+        this.dispatchEvent(new CustomEvent('signin-user'),{
+          bubbles:false,
+          composed:false,
+          detail:{
+            username: this.username,
+            password: this.password,
+            age: this.age,
+            image: this.picture
+          }
+        });
+      }
+      setToggle() {
+        this.set('toggle', !this.toggle);
+      }
+    }
+
+    window.customElements.define(LoginMusic.is, LoginMusic);
+  </script>
+</dom-module>
